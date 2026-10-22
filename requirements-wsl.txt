@@ -1,0 +1,6 @@
+faster-whisper>=1.2
+# faster-whisper 1.2.x 调用 av.open(metadata_errors=...)，新版 PyAV 已删掉这个参数
+av<16
+opencc
+nvidia-cublas-cu12
+nvidia-cudnn-cu12==9.*
