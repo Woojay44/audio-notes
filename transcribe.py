@@ -16,7 +16,7 @@ DEFAULT_OUT = Path(__file__).resolve().parent / "transcripts"
 PROMPT = "以下是普通话的课堂或学术会议录音，内容使用简体中文，并带有标点符号。"
 PARA_GAP, PARA_LEN = 2.0, 60.0
 # Whisper 在音乐/噪声处常编出的视频平台套话，整段丢弃
-HALLUCINATIONS = ("请不吝点赞", "订阅 转发", "明镜与点点", "字幕由", "感谢观看")
+HALLUCINATIONS = ("请不吝点赞", "订阅 转发", "明镜与点点", "字幕", "李宗盛", "感谢观看")
 NOISE = re.compile(r"[぀-ヿ가-힯ᄀ-ᇿ]+")
 
 
@@ -92,10 +92,10 @@ def main():
             if para and (s.start - last_end > PARA_GAP or s.start - para_start > PARA_LEN):
                 lines.append(f"[{fmt(para_start)}] " + " ".join(para))
                 para = []
-            if not para:
-                para_start = s.start
             if any(h in s.text for h in HALLUCINATIONS):
                 continue
+            if not para:
+                para_start = s.start
             # 偶尔冒出的繁体转简体，韩文/日文假名乱码删掉
             para.append(NOISE.sub("", t2s.convert(s.text)).strip())
             last_end = s.end
